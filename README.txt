@@ -1,5 +1,5 @@
 Instrucciones:
-Descargar todos los archivos que terminan con .py
+Descargar carpeta "preguntas_relacionadas"
 Los archivos excel son a manera de ejemplo de lo que se hace.
 
 Asegurarse de contar con un cuestionario previamente marcado con las preguntas que se
