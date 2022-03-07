@@ -15,8 +15,9 @@ import pandas as pd
 import openpyxl as op
 
 documento = 'p_formula_blanco_prueba_validr.xlsx'
-datos = pd.read_csv('PR_p_formula.csv')
+guia = pd.read_csv('PR_p_formula.csv')
 
+datos = guia
 
 
 
@@ -183,7 +184,7 @@ datos['valor'] = d.buscar_col('valores')
 datos['resultado'] = d.buscar_col('resultados')
 
 doc = documento.split('.')
-datos.to_csv(f'respuesta{doc[0]}.csv',index=False)
+datos.to_csv(f'resultado{doc[0]}.csv',index=False)
 
 # si = libro['Hoja1']
 

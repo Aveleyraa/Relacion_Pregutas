@@ -19,11 +19,11 @@ from utilidad_VPR import p_rel
 
 guia = pd.read_csv('PR_p_formula.csv')
 
-archivo = 'p_formula_blanco'#Tiene que ser cuestionario para meter validaciones
+archivo = 'p_formula_blanco.xlsx'#Tiene que ser cuestionario para meter validaciones
 
-libro = f'{archivo}.xlsx'
 
-book = op.load_workbook(libro)
+
+book = op.load_workbook(archivo)
 
 pags = book.sheetnames
 
@@ -48,5 +48,5 @@ for pa in pags:
     else:
         pass
 
-
-book.save(f'{archivo}_prueba_validr.xlsx')
+nom_s = archivo.split('.')
+book.save(f'{nom_s[0]}_vprel.xlsx')
