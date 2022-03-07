@@ -74,7 +74,9 @@ for seccion in secciones:
             if len(a) > 1:
                 suma = 0
                 ns = []
+                na = []
                 nsd = ['NS','ns']
+                nad = ['NA','na']
                 lista = []
                 for co in a:
                     valor = si[co]
@@ -87,9 +89,14 @@ for seccion in secciones:
                     if v in nsd:
                         ns.append(1)
                         v = 0
+                    if v in nad:
+                        na.append(1)
+                        v = 0
                     suma += v
                 if suma == 0 and 1 in ns:
                     suma = 'NS'
+                if suma == 0 and 1 in na:
+                    suma = 'NA'
                 va.append(str(suma))
                 val.append(suma)
             else:
