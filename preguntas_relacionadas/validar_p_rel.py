@@ -15,7 +15,7 @@ SE necesita guía y censo para validar (puede ser un
 
 import pandas as pd
 import openpyxl as op
-from utilidad_VPR import p_rel
+from utilidades.utilidad_VPR import p_rel
 
 guia = pd.read_csv('PR_p_formula.csv')
 

@@ -1,0 +1,7 @@
+seccion,coordenada,comparacion,operacion,ID,valor,resultado
+Hoja1,"AB5,AB6,AB7",A2,ref,A2,9,NA
+Hoja1,AA7,A1,ref,A1,5,NA
+Hoja1,AA12,A1,mayor,A1.1>,NS,0
+Hoja1,AB12,A2,igual,A2.1=,NA,0
+Hoja1,AC7,A3,ref,A3,8,NA
+Hoja1,AC12,A3,menor,A3.1<,9,1
