@@ -10,11 +10,11 @@ coincidan con la validación establecida en proceso "encontrar"
 
 Se necesita la guía y el censo contestado
 """
-from frames import Frame
+from utilidades.frames import Frame
 import pandas as pd 
 import openpyxl as op
 
-documento = 'p_formula_blanco_prueba_validr.xlsx'
+documento = 'p_formula_blanco_vprel.xlsx'
 guia = pd.read_csv('PR_p_formula.csv')
 
 datos = guia
