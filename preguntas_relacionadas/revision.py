@@ -42,7 +42,7 @@ def NS(comparador,referente):
     if referente in a and comparador not in a:
         return 1
     if referente not in a and comparador in a:
-        return 0
+        return 1 #Error discutido con Paulina sobre NA´s 
     if referente in n and comparador in n:
         return 0
     if referente == 0 and comparador in n:
