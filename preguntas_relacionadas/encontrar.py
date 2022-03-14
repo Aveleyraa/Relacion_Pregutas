@@ -25,7 +25,8 @@ base = {}
 def genp():
     abc1 = list(string.ascii_uppercase)
     abc = list(string.ascii_lowercase)
-    l = abc1[:12] + abc[:12]
+    nn = ['Ñ','ñ'] 
+    l = abc1 + abc + nn
     res = []
     for i in l:
         for d in range(1,10):
@@ -167,21 +168,27 @@ def clasif(cadena):
         return 'ref'
 
 def formulaS(cadena,seccion):
+    
     if seccion != '':
         ad = seccion+'!'
     else:
         ad = seccion
     c = cadena.split(',')
-    r = f'COUNTIF({ad}{c[0]},"NS")'
-    ca = f'{ad}{c[0]}'
-    bl = f'ISBLANK({ad}{c[0]})'
-    o = f'COUNTIF({ad}{c[0]},"NA")'
-    for co in c[1:]:
-        r += f'+COUNTIF({ad}{co},"NS")'
-        ca += f',{ad}{co}'
-        bl += f',ISBLANK({ad}{co})'
-        o += f'+COUNTIF({ad}{co},"NA")'
-        
+    r = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NS")'
+    ca = f'{ad}{c[0]}:{ad}{c[-1]}'
+    bl = f'ISBLANK({ad}{c[0]}:{ad}{c[-1]})'
+    o = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NA")'
+    #metodo para coordenadas sino fueran continuos
+    # r = f'COUNTIF({ad}{c[0]},"NS")'
+    # ca = f'{ad}{c[0]}'
+    # bl = f'ISBLANK({ad}{c[0]})'
+    # o = f'COUNTIF({ad}{c[0]},"NA")'
+    # for co in c[1:]: 
+    #     r += f'+COUNTIF({ad}{co},"NS")'
+    #     ca += f',{ad}{co}'
+    #     bl += f',ISBLANK({ad}{co})'
+    #     o += f'+COUNTIF({ad}{co},"NA")'
+      
     formula = f'IF(AND(SUM({ca})=0,{r}>0),"NS",IF(AND(SUM({ca})=0,{o}>0),"NA",IF(AND({bl}),"",SUM({ca}))))'
     return formula
 
@@ -263,6 +270,7 @@ for element in original['comparacion']:
     
     else:
         c = original['coordenada'][fila]
+        
         if ',' in c:
             c = formulaS(c,'')
         a = determinar(original['operacion'][fila])
@@ -272,11 +280,13 @@ for element in original['comparacion']:
             if ele == element:
                 b = original['coordenada'][filac]
                 sec1 = original['seccion'][filac]
+                
                 if ',' in b:
+                    if sec == sec1:
+                        b = formulaS(b,'')
+                    else: #referente de formula a otra hoja
+                        b = formulaS(b,sec1)
                     
-                    b = formulaS(b,'')
-                if sec != sec1: #referente de formula a otra hoja
-                    b = formulaS(b,sec1)
             else:
                 pass
             filac += 1

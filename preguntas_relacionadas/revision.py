@@ -193,12 +193,3 @@ datos['resultado'] = d.buscar_col('resultados')
 doc = documento.split('.')
 datos.to_csv(f'resultado{doc[0]}.csv',index=False)
 
-# si = libro['Hoja1']
-
-# a = si['B6']
-# b = si['C6']
-
-# if a.value == b.value:
-#     print('Los valores coinciden')
-# else:
-#     print('Los valores no coinciden')
