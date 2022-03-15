@@ -15,7 +15,7 @@ import pandas as pd
 import string
 
 
-libro = '01_DIMJA_24ene2022_marcas.xlsx'
+libro = 'p_formula.xlsx'
 
 
 base = {}
@@ -177,8 +177,10 @@ def formulaS(cadena,seccion):
     c = cadena.split(',')
     r = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NS")'
     ca = f'{ad}{c[0]}:{ad}{c[-1]}'
-    bl = f'ISBLANK({ad}{c[0]}:{ad}{c[-1]})'
+    bl = f'ISBLANK({ad}{c[0]})'
     o = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NA")'
+    for co in c[1:]: 
+        bl += f',ISBLANK({ad}{co})' #Esto porque es blanco solo funciona con una celda
     #metodo para coordenadas si no fueran continuos
     # r = f'COUNTIF({ad}{c[0]},"NS")'
     # ca = f'{ad}{c[0]}'
@@ -211,6 +213,7 @@ def sumco(co,num):
     return cor
 
 def columnas(unicos,base,secc):
+    
     for columna in unicos:
         
         seccion = secc
@@ -258,7 +261,7 @@ def columnas(unicos,base,secc):
 
             for ke in fila:
                 base[ke].insert(indices[0],fila[ke])
-        
+     
     return base
 """
 Documento
@@ -354,7 +357,8 @@ for element in original['comparacion']:
             if ele == element:
                 b = original['coordenada'][filac]
                 sec1 = original['seccion'][filac]
-                
+                if sec != sec1: 
+                    b = sec1+'!'+b
                 if ',' in b:
                     if sec == sec1:
                         b = formulaS(b,'')
