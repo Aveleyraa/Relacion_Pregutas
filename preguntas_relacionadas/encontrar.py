@@ -15,7 +15,7 @@ import pandas as pd
 import string
 
 
-libro = 'p_formula.xlsx'
+libro = '01_DIMJA_24ene2022_marcas.xlsx'
 
 
 base = {}
@@ -240,7 +240,7 @@ def columnas(unicos,base,secc):
         integrar = [d]
         for i in range(1,resta+1):
             e = {'seccion':seccion,'coordenada':cor,
-                 'comparacion':ide,'operacion':'ref','ID':ide} #operacion es 'ref' para que solo se ponga formula de la primera celda de la columna. Esto debido al tema de espacio en el cuestionario con otras validaciones. Con esa formula, se peude copiar y pegar en otro lado con espacio y arrastrarla para generar las demás. Esto será así hasta que se desarrolle un lector de espacios o algo así
+                 'comparacion':ide,'operacion':op,'ID':ide}
             e['coordenada'] = sumco(coord[0],i)
             e['ID'] = ide+str(i)
             if '.' in e['comparacion']:
@@ -341,7 +341,7 @@ fila = 0
 for element in original['comparacion']:
     if element == original['ID'][fila]:
         formulas.append('NA')
-    
+
     else:
         c = original['coordenada'][fila]
         
@@ -404,6 +404,8 @@ for element in original['ID']:
                 original['formulas'][fila] = 'Borrar'
         else:
             original['formulas'][fila] = 'Borrar'
+    if len(original['comparacion'][fila])>2:
+        original['formulas'][fila] = 'NA'
     fila += 1
 borrar = original[original['formulas']=='Borrar'].index
 original = original.drop(borrar)
