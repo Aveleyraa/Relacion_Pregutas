@@ -14,6 +14,7 @@ Se necesita cuestionario marcado nada más
 import pandas as pd
 import string
 
+
 libro = 'p_formula.xlsx'
 
 
@@ -178,7 +179,7 @@ def formulaS(cadena,seccion):
     ca = f'{ad}{c[0]}:{ad}{c[-1]}'
     bl = f'ISBLANK({ad}{c[0]}:{ad}{c[-1]})'
     o = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NA")'
-    #metodo para coordenadas sino fueran continuos
+    #metodo para coordenadas si no fueran continuos
     # r = f'COUNTIF({ad}{c[0]},"NS")'
     # ca = f'{ad}{c[0]}'
     # bl = f'ISBLANK({ad}{c[0]})'
@@ -192,6 +193,73 @@ def formulaS(cadena,seccion):
     formula = f'IF(AND(SUM({ca})=0,{r}>0),"NS",IF(AND(SUM({ca})=0,{o}>0),"NA",IF(AND({bl}),"",SUM({ca}))))'
     return formula
 
+def getnum(cad):
+    numero = ''
+    for caracter in cad:
+        if caracter.isnumeric():
+            numero += caracter
+    numero = int(numero)
+    return numero
+
+def sumco(co,num):
+    letra = ''
+    fila = getnum(co)
+    for caracter in co:
+        if caracter.isalpha():
+            letra += caracter
+    cor = f'{letra}{fila+num}'
+    return cor
+
+def columnas(unicos,base,secc):
+    for columna in unicos:
+        
+        seccion = secc
+        coord = []
+        ide = ''.join(l for l in columna if l != ':')
+        op = clasif(columna)
+        c = 0
+        indices = []
+        for ele in base['ID']:
+            
+            if ele == columna:
+                coord.append(base['coordenada'][c])
+                indices.append(c)
+            c += 1
+        cor = coord[0]
+        a1 = getnum(coord[0])
+        a2 = getnum(coord[1])
+        resta = a2-a1
+        ide1 = ide
+        if '.' in ide:
+            iterar = ide.split('.')
+            n = iterar[0]
+            ide1 = n
+            
+        d = {'seccion':seccion,'coordenada':cor,
+             'comparacion':ide1,'operacion':op,'ID':ide}
+        integrar = [d]
+        for i in range(1,resta+1):
+            e = {'seccion':seccion,'coordenada':cor,
+                 'comparacion':ide,'operacion':'ref','ID':ide} #operacion es 'ref' para que solo se ponga formula de la primera celda de la columna. Esto debido al tema de espacio en el cuestionario con otras validaciones. Con esa formula, se peude copiar y pegar en otro lado con espacio y arrastrarla para generar las demás. Esto será así hasta que se desarrolle un lector de espacios o algo así
+            e['coordenada'] = sumco(coord[0],i)
+            e['ID'] = ide+str(i)
+            if '.' in e['comparacion']:
+                e['ID'] = ide
+                iterar = e['comparacion'].split('.')
+                n = iterar[0]
+                e['comparacion'] = n + str(i)
+            else:
+                e['comparacion'] = ide+str(i)
+            integrar.append(e)
+        for ind in reversed(indices):
+            for lla in base:
+                base[lla].pop(ind)
+        for fila in reversed(integrar):
+
+            for ke in fila:
+                base[ke].insert(indices[0],fila[ke])
+        
+    return base
 """
 Documento
 
@@ -210,16 +278,22 @@ for pag in pags:
     r = nframe(a)
     base[pag] = r
 
-#sacar sumas
+#sacar sumas y columnas
 
 for k in base:
     
     sua = []
+    colum = []
     for ele in base[k]['ID']:
         if '+' in ele:
             sua.append(ele)
+        if ':' in ele:
+            colum.append(ele)
     sua1 = list(set(sua))
     
+    if colum:
+        column = list(set(colum))
+        base[k] = columnas(column,base[k],k)
     for suma in sua1:
         
         seccion = k
@@ -247,7 +321,7 @@ for k in base:
             for ke in d:
                 base[k][ke].insert(0,d[ke])
     
-        
+   
 
 #Hacer el frame
 
@@ -292,7 +366,15 @@ for element in original['comparacion']:
             filac += 1
         
         if a == 'posible mala referencia':
-            formulas.append(a)
+            signos = ['<','>','=']
+            rt = 0
+            for signo in signos:
+                if signo in original['ID'][fila]: #esta comprobación es para las validaciones de columnas donde se usa el ":"
+                    rt = 1
+            if original['operacion'][fila] == 'ref' and rt == 1:
+                formulas.append('NA')
+            else:
+                formulas.append(a)
         else:
             try:
                 form = f'=IF(AND({c}{a}{b},OR(AND(ISNUMBER({b}),ISNUMBER({c})),AND(ISBLANK({b}),ISBLANK({c})),OR(AND(ISBLANK({b}),{c}=""),AND(ISBLANK({c}),{b}="")))),0,IF(OR(AND({c}="NS",{b}>0,ISNUMBER({b})),AND({c}="NS",{b}="NS"),OR(AND({b}="NA",{c}="NA"),AND({b}="NA",ISBLANK({c})))),0,1))'
