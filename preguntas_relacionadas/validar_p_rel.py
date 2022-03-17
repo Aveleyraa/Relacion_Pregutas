@@ -17,9 +17,9 @@ import pandas as pd
 import openpyxl as op
 from utilidades.utilidad_VPR import p_rel
 
-guia = pd.read_csv('PR_p_formula.csv')
+guia = pd.read_csv('PR_01_3_CNIJF_2022_M1_S3_V3(03dic21)_Act21Enemarcas.csv')
 
-archivo = 'p_formula_blanco.xlsx'#Tiene que ser cuestionario para meter validaciones
+archivo = '01_3_CNIJF_2022_M1_S3_V3(03dic21)_Act21Ene.xlsx'#Tiene que ser cuestionario para meter validaciones
 
 
 

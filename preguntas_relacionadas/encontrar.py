@@ -15,7 +15,7 @@ import pandas as pd
 import string
 
 
-libro = 'p_formula.xlsx'
+libro = '01_3_CNIJF_2022_M1_S3_V3(03dic21)_Act21Enemarcas.xlsx'
 
 
 base = {}
@@ -175,10 +175,10 @@ def formulaS(cadena,seccion):
     else:
         ad = seccion
     c = cadena.split(',')
-    r = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NS")'
-    ca = f'{ad}{c[0]}:{ad}{c[-1]}'
+    r = f'COUNTIF({ad}{c[0]}:{c[-1]},"NS")'
+    ca = f'{ad}{c[0]}:{c[-1]}'
     bl = f'ISBLANK({ad}{c[0]})'
-    o = f'COUNTIF({ad}{c[0]}:{ad}{c[-1]},"NA")'
+    o = f'COUNTIF({ad}{c[0]}:{c[-1]},"NA")'
     for co in c[1:]: 
         bl += f',ISBLANK({ad}{co})' #Esto porque es blanco solo funciona con una celda
     #metodo para coordenadas si no fueran continuos
