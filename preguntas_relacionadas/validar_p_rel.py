@@ -11,6 +11,9 @@ imprimen las fórmulas de validación en el cuestionario
 
 SE necesita guía y censo para validar (puede ser un 
    cuestionario ya con validaciones o en blanco, según se disponga)
+
+es importante que existan marcas "W" en el cuestionario para que se 
+pueda hacer la escritura de forma correcta
 """
 
 import pandas as pd
@@ -28,15 +31,8 @@ book = op.load_workbook(archivo)
 pags = book.sheetnames
 
 
-# para_pags = ['Secc']
-# pags = []
-# for val in para_pags:
-#     pags1 = [pag for pag in p if val in pag]
-#     pags += pags1
-  
+#iterar por cada una de las hojas de excel para escribir las validaciones
 
-# pags = ['Hoja1','Hoja2']
-# pags = ['CNIJF_2022_M1_Secc1_Sub5']
 for pa in pags:
     
     pagina = pa

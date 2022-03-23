@@ -15,7 +15,7 @@ import pandas as pd
 import string
 
 
-libro = '01_3_CNIJF_2022_M1_S3_V3(03dic21)_Act21Enemarcas.xlsx'
+libro = '01_CNSIPEF_2022_M1_Estructura organizacional y recursos_VF(21Sep21).xlsx'
 
 
 base = {}
@@ -24,6 +24,11 @@ base = {}
 
 
 def genp():
+    """
+    regresa res que es una lista con letras mayusculas y minusculas 
+    para buscar coincidencias en el documento excel (las marcas)
+    ejemplo ["A1","b1"...]
+    """
     abc1 = list(string.ascii_uppercase)
     abc = list(string.ascii_lowercase)
     nn = ['Ñ','ñ'] 
@@ -35,9 +40,25 @@ def genp():
         
     return res
 
-posibles = genp() + ['W']
+posibles = genp() + ['W'] #variable con la lista para buscar letras con numeros en el documento
 
 def filtro(cadena):
+    """
+    
+
+    Parameters
+    ----------
+    cadena : str 
+
+    Returns
+    -------
+    str
+        Regresa una string dependiendo el signo que encuentre en la cadena
+        que se pasa como argumento de entrada. En caso de que no detecte
+        ninguno, regresa ref, que ace alución a las marcas que son referentes
+        y no necesitan ser comparados
+
+    """
     a = '>'
     b = '<'
     c = '='
@@ -55,12 +76,32 @@ def filtro(cadena):
     
     
 def imagen(sec,datos):
+    """
+    
 
+    Parameters
+    ----------
+    sec : str
+        Es el nombre de la hoja de excel que se va a leer.
+    datos : dataframe pandas
+        es la hoja de excel a leer, expresada en un dataframe de pandas.
+
+    Returns
+    -------
+    entot : dic
+        regresa un diccionario que contiene filas, columnas y sección
+        donde se encontraron las letras de variable "posibles". además 
+        contiene dentro de sí, otros diccionarios referentes alas letras
+        que encontró, determianndo si son referentes o comparadores,
+        la id a la que hacen referencia los comparadores, así como su
+        operacion de acuerdo al signo detectado dentro de la string.
+
+    """
     mdf = datos
     reg = 0
     cont = 0
     entot = {'fila':[],'columna':[],
-             'comp':[],'sec':[],'id':[]}
+             'sec':[]}
     asig = {}
     asig1 = {}
     asid = {}
@@ -107,6 +148,27 @@ def imagen(sec,datos):
     return entot
 
 def cordenadas(sec,datos):
+    """
+    
+
+    Parameters
+    ----------
+    sec : str
+        nombre de la hoja de excel a leer.
+    datos : dataframe de pandas
+        la hoja de excel a leer expresada en dataframe de pandas.
+
+    Returns
+    -------
+    d_salida : dic
+        Regresa diccionario con las coordenadas expresadas a manera de 
+        documento en excel, ejemplo "A25" para referir a una celda que
+        está en columna A, fila 25. También tiene la sección donde está
+        sacando esas coordenadas y la id de las macas que encontró. 
+        La id en este caso es la marca como se ha puesto en el documento,
+        por ejemplo "a1.1>"
+
+    """
     abc1 = list(string.ascii_uppercase)+['AA','AB','AC','AD','AE']
     d = imagen(sec,datos)
     d_salida = {}
@@ -133,10 +195,11 @@ def cordenadas(sec,datos):
     return d_salida
 
 def nframe(di):
+    "esta funcion ordena el diccionario que da de salida la funcion coordenadas"
     b = {'seccion':[],'coordenada':[],
          'comparacion':[],'operacion':[],'ID':[]}
     for k in di:
-        if 'sec' not in k and 'Op' not in k and 'id' not in k:
+        if 'sec' not in k and 'Op' not in k and 'id' not in k: #se itera solo para el elemento en el diccionario que corresponde a la letra buscada en la marca, no a su id, ni secion ni operacion
             c = 0
             for val in di[k]:
                 
@@ -146,9 +209,24 @@ def nframe(di):
                 b['seccion'].append(di[k+'sec'][c])
                 b['ID'].append(di[k+'id'][c])
                 c += 1
+    
     return b
 
 def determinar(cadena):
+    """
+    
+
+    Parameters
+    ----------
+    cadena : str
+        operacion que se va a realizar para comparar.
+
+    Returns
+    -------
+    str
+        elementos para realizar formula que se escribirá en excel. 
+
+    """
     if cadena == 'menor':
         return '<='
     if cadena == 'mayor':
@@ -159,6 +237,20 @@ def determinar(cadena):
         return 'posible mala referencia'
 
 def clasif(cadena):
+    """
+    
+
+    Parameters
+    ----------
+    cadena : str
+        operacion que se va a realizar para comparar.
+
+    Returns
+    -------
+    str
+       regresarlo en palabras es importante para el proceso de revision.
+
+    """
     if '<' in cadena:
         return 'menor'
     if '>' in cadena:
@@ -169,7 +261,26 @@ def clasif(cadena):
         return 'ref'
 
 def formulaS(cadena,seccion):
+    """
     
+
+    Parameters
+    ----------
+    cadena : str
+        cadena con más de una coordenada.
+    seccion : str
+        nombre de la hoja de excel.
+
+    Returns
+    -------
+    formula : str
+        Dado que hay más de una coordenada, se tiene que hacer un proceso
+        adicional para generar una formula que nos dé el valor concreto
+        de la suma de los valores que se detecten en las coordenadas
+        que están siendo pasadas como argumento de esta funcion. Regresa
+        por lo tanto una formula que hace eso.
+
+    """
     if seccion != '':
         ad = seccion+'!'
     else:
@@ -196,6 +307,7 @@ def formulaS(cadena,seccion):
     return formula
 
 def getnum(cad):
+    "regresa el numero de fila de una coordenada de excel"
     numero = ''
     for caracter in cad:
         if caracter.isnumeric():
@@ -204,6 +316,23 @@ def getnum(cad):
     return numero
 
 def sumco(co,num):
+    """
+    
+
+    Parameters
+    ----------
+    co : str
+        coordenada de excel ejemplo A25.
+    num : int
+        numero que se va a sumar a la fila de la coordenada.
+
+    Returns
+    -------
+    cor : str
+        nueva coordenda con el num sumado a la fila de la coordenada de 
+        entrada.
+
+    """
     letra = ''
     fila = getnum(co)
     for caracter in co:
@@ -213,7 +342,33 @@ def sumco(co,num):
     return cor
 
 def columnas(unicos,base,secc):
+    """
     
+
+    Parameters
+    ----------
+    unicos : list
+        Lista de valores unicos en donde se detectó existencia 
+        del caracter ":"
+    base : dic
+        Diccionario donde están conenidos todos los elementos registrados
+        de una hoja de excel.
+    secc : str
+        nombre de la hoja de excel.
+
+    Returns
+    -------
+    base : dic
+        Regresa el diccionario de entrada pero modificado ya que agrega 
+        las celdas contenidas en las columnas marcadas. Las marcas con ":"
+        representan una columna a comparar con otra, donde en realidad cada
+        fila de esa columna tiene que ser comparada con la fila de otra.
+        Por esa razón se generan las referencias necesarias a cada fila dentro
+        de las columnas que fueron marcadas. Además, se hace el borrado del
+        caracter ":" para no generar errores en los procesos siguentes
+        de creación de formulas.
+
+    """
     for columna in unicos:
         
         seccion = secc
@@ -263,14 +418,11 @@ def columnas(unicos,base,secc):
                 base[ke].insert(indices[0],fila[ke])
      
     return base
-"""
-Documento
-
-"""
 
 
+#Aqui se inicia el proceso de lectura para cada hoja del documento
 
-# se = ['Hoja1','Hoja2']
+
 pags = pd.ExcelFile(libro).sheet_names
 
 
@@ -281,7 +433,7 @@ for pag in pags:
     r = nframe(a)
     base[pag] = r
 
-#sacar sumas y columnas
+#sacar sumas y columnas a los diccionarios generados para cada hoja donde se encontró una marca
 
 for k in base:
     
@@ -326,7 +478,7 @@ for k in base:
     
    
 
-#Hacer el frame
+#Hacer el dataframe
 
 
 c = 0
