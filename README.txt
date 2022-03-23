@@ -1,5 +1,7 @@
 Instrucciones:
-Descargar carpeta "preguntas_relacionadas"
+Descargar carpeta "preguntas_relacionadas" (la descarga se hace presionando el boton verde
+que dice "Code" y luego en "Download Zip". Esto hará que se descargue todo el proyecto, pero
+solo es de interés la carpeta mencionada).
 Los archivos excel son a manera de ejemplo de lo que se hace.
 
 Asegurarse de contar con un cuestionario previamente marcado con las preguntas que se

@@ -32,8 +32,9 @@ def p_rel(guia, excel, pagina):
     return
 
 def escribir(lista,excel):
+    "escribe la formula contenida en la lista en el excel de openpyxl"
     fila = lista[0]
-    columna = 32 #porque AF es 32
+    columna = 32 #porque columna AF en excel es 32
     for formula in lista[1:]:
         excel.cell(row=fila,column=columna,value=formula)
         columna += 1
@@ -41,6 +42,22 @@ def escribir(lista,excel):
 
 
 def categorizar(datos,pag):
+    """
+    
+
+    Parameters
+    ----------
+    datos : dataframe de pandas.
+    pag : str
+        nombre de la hoja de excel en la que se va a trabajar.
+
+    Returns
+    -------
+    rl : list
+        Lista de listas por cada "W" encontrada con las coordenadas 
+        ordenadas y la fila en donde se debe escribir.
+
+    """
     rl = []
     mdf = datos.loc[datos['seccion']==pag]
     w = mdf.loc[mdf['ID']=='W']
