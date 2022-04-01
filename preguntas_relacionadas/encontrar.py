@@ -15,7 +15,7 @@ import pandas as pd
 import string
 
 
-libro = '01_CNSIPEF_2022_M1_Estructura organizacional y recursos_VF(21Sep21).xlsx'
+libro = '01_DIMJA_24ene2022_marcas (1).xlsx'
 
 
 base = {}
@@ -425,13 +425,19 @@ def columnas(unicos,base,secc):
 
 pags = pd.ExcelFile(libro).sheet_names
 
-
+saltar = [
+    'Índice',
+    'Presentación',
+    'Informantes',
+    'Participantes',
+    'Glosario']
 for pag in pags:
     pagina = pag
-    data = pd.read_excel(libro,sheet_name=pagina,engine='openpyxl')
-    a = cordenadas(pag,data)
-    r = nframe(a)
-    base[pag] = r
+    if pagina not in saltar:
+        data = pd.read_excel(libro,sheet_name=pagina,engine='openpyxl')
+        a = cordenadas(pag,data)
+        r = nframe(a)
+        base[pag] = r
 
 #sacar sumas y columnas a los diccionarios generados para cada hoja donde se encontró una marca
 
@@ -494,6 +500,7 @@ for k in base:
 formulas = []
 fila = 0
 for element in original['comparacion']:
+
     if element == original['ID'][fila]:
         formulas.append('NA')
 
@@ -566,10 +573,33 @@ for element in original['ID']:
 borrar = original[original['formulas']=='Borrar'].index
 original = original.drop(borrar)
 
+# poner referentes al inicio de cada seccion 
+
+secciones = original['seccion'].unique()
+
+contenedor = pd.DataFrame()
+
+for seccion in secciones:
+    nframe = original.loc[original['seccion']==seccion]
+    nframe = nframe.sort_values(by=['operacion'],ascending=False)
+    contenedor = pd.concat([contenedor,nframe])
+contenedor = contenedor.reset_index(drop=True)
+
+# encontrar referentes duplicados
+dup = contenedor['ID'].value_counts()
+
+fila = 0
+
+for i in contenedor['ID']:
+    if contenedor['operacion'][fila] == 'ref':
+        if dup[i] > 1:
+            contenedor['formulas'][fila] = 'repetido'
+    fila += 1
+
 #guardar
 
 nom_s = libro.split('.')
-original.to_csv(f'PR_{nom_s[0]}.csv',index=False)
+contenedor.to_csv(f'PR_{nom_s[0]}.csv',index=False,encoding='latin1')
 
 
 

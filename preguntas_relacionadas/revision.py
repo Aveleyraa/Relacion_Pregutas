@@ -14,9 +14,10 @@ from utilidades.frames import Frame
 import pandas as pd 
 import openpyxl as op
 from openpyxl.styles import PatternFill
+from encontrar import getnum
 
-documento = 'CNSIPEF_2022_M1_V1.xlsx'
-guia = pd.read_csv('PR_01_CNSIPEF_2022_M1_Estructura organizacional y recursos_VF(21Sep21).csv')
+documento = 'CNIFJ_2022_M1_S3_Resp (1).xlsx'
+guia = pd.read_csv('PR_01_3_CNIJF_2022_M1_S3_V3(03dic21)_Act21Ene (1).csv')
 
 datos = guia
 
@@ -221,25 +222,65 @@ datos['resultado'] = d.buscar_col('resultados')
 
 #Marcar celdas con errores
 #esto no es tan buena idea debido a que el archivo se abre con solo valores, por lo que al guardarlo se pierden las formulas
-cafe =PatternFill('solid',start_color='D35400',end_color='D35400')
-c = 0
-for error in datos['resultado']:
-    if error == 1:
-        cor = datos['coordenada'][c]
-        cr = cor.split(',')
-        seccion = datos['seccion'][c]
-        hoja = libro[seccion]
-        for corde in cr:
-            a1 = hoja[corde]
-            a1.fill = cafe
-    c += 1
-libro.save(documento)
+# cafe =PatternFill('solid',start_color='D35400',end_color='D35400')
+# c = 0
+# for error in datos['resultado']:
+#     if error == 1:
+#         cor = datos['coordenada'][c]
+#         cr = cor.split(',')
+#         seccion = datos['seccion'][c]
+#         hoja = libro[seccion]
+#         for corde in cr:
+#             a1 = hoja[corde]
+#             a1.fill = cafe
+#     c += 1
+# libro.save(documento)
 
 #hacer columna de preguntas para indicar el numero de pregunta donde hay error
-# datos['preguntas'] = 'NA'
+datos['preguntas'] = 'NA'
 
-# for seccion in secciones:
-#     df = pd.read_excel(documento,sheet_name=seccion)
+
+def preguntas(hopan):
+    "regresa una lista con la coordenada del inicio de preguntas. Es usada en funcion espacio"
+    c=0
+    ind=[]
+    for i in hopan['Unnamed: 0']:
+        a = pd.isna(hopan['Unnamed: 0'][c])
+        if a == False:
+            ind.append(c)
+        c+=1
+    return ind
+
+
+
+for seccion in secciones:
+    df = pd.read_excel(documento,sheet_name=seccion)
+    pre = preguntas(df)
+    fila = 0
+    for r in datos['resultado']:
+        if r == 1:
+            if datos['seccion'][fila] == seccion:
+                cor = datos['coordenada'][fila]
+                cor = cor.split(',')
+                fi = []
+                for co in cor:
+                    a = getnum(co)
+                    fi.append(a)
+                fi.sort()
+                fp = 0
+                kl = -1
+                for p in pre:
+                    if fi[0] < p:
+                        fp = pre[kl]
+                        break
+                    kl += 1
+                hoja = libro[seccion]
+                fp += 2
+                ncor = f'A{fp}'
+                npreg = hoja[ncor].value
+                datos['preguntas'][fila] = npreg
+        fila += 1
+                
     
 
 #guardar un nuevo dataframe con las columnas de valor y resultado
