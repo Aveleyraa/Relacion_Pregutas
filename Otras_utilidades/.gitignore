@@ -1,6 +1,6 @@
-Cambios/__pycache__
-Cambios/*xlsx
-Cambios/*csv
-Contrlyseguimiento/__pychache__
-Contrlyseguimiento/*.xlsx
-Contrlyseguimiento/*.csv
+/Cambios/__pycache__
+/Cambios/*.xlsx
+/Cambios/*.csv
+/Contrlyseguimiento/__pychache__
+/Contrlyseguimiento/*.xlsx
+/Contrlyseguimiento/*.csv

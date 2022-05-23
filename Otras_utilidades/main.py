@@ -68,9 +68,9 @@ class App(customtkinter.CTk):
         self.frame_info.columnconfigure(0, weight=2)
 
         self.label_info_1 = customtkinter.CTkLabel(master=self.frame_info,
-                                                    text="                Sistema de Validación de Censos.    \n" +
-                                                        "1. Seleccione un censo en blanco para su validación.\n" +
-                                                        "2. Al terminar la validación aparecerá un mensaje exitoso." ,
+                                                    text="                Contro y seguimiento de censos.    \n" +
+                                                        "1. Seleccione los archivos a comparar.\n" +
+                                                        "2. Al terminar el proceso aparecerá un mensaje exitoso." ,
                                                     height=100,
                                                     fg_color=("white", "gray38"),  # <- custom tuple-color
                                                     justify=tkinter.LEFT)
