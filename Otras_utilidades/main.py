@@ -82,13 +82,13 @@ class App(customtkinter.CTk):
         # ============ frame_right <- ============
 
         self.boton_importar = customtkinter.CTkButton(master=self.frame_right,
-                                                        text="Importar archivo",
-                                                        command=self.revisar_cambios)
+                                                        text= "Formato de observaciones",
+                                                        command=self.control)
         self.boton_importar.grid(row=6, column=1, pady=20, padx=20, sticky="w")
         
         self.boton_importar_2 = customtkinter.CTkButton(master=self.frame_right,
-                                                        text="Importar archivo a revisar",
-                                                        command=self.control)
+                                                        text="Revisión de cambios",
+                                                        command=self.revisar_cambios)
         self.boton_importar_2.grid(row=6, column=0, pady=20, padx=20, sticky="w")
 
         self.button_5 = customtkinter.CTkButton(master=self.frame_right,
@@ -113,6 +113,13 @@ class App(customtkinter.CTk):
 
     def start(self):
         self.mainloop()
+
+    def open_win():
+        new= Toplevel(win)
+        new.geometry("750x250")
+        new.title("New Window")
+        #Create a Label in New window
+        Label(new, text="Hey, Howdy?", font=('Helvetica 17 bold')).pack(pady=30)
 
     def revisar_cambios(self):
 
