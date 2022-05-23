@@ -8,7 +8,7 @@ Created on Thu Mar 31 16:26:00 2022
 import pandas as pd
 import openpyxl as op
 
-def con_y_seg(book, observaciones):
+def con_y_seg(book, observaciones, nrev, fepro, fere, lev, pm):
     
     hoja = book['M1']
 
@@ -17,11 +17,11 @@ def con_y_seg(book, observaciones):
     datos = pd.read_excel(observaciones,sheet_name=hojap)
     datos = datos.fillna(0)
 
-    nrev = input('Qué número de revisión es? ')
-    fepro = input('Cuál es la fecha programada de entrega? ')
-    fere = input('Cuál fue la fecha real de entrega? ')
-    lev = input('Cuál es el año del levantamiento? ')
-    pm = input('Cuántas preguntas tiene el módulo? ')
+    #nrev = input('Qué número de revisión es? ')
+    #fepro = input('Cuál es la fecha programada de entrega? ')
+    #fere = input('Cuál fue la fecha real de entrega? ')
+    #lev = input('Cuál es el año del levantamiento? ')
+    #pm = input('Cuántas preguntas tiene el módulo? ')
     dhabiles = '=NETWORKDAYS(H11,M11)'
     programa = datos['Unnamed: 3'][9]
     preguntas = []
