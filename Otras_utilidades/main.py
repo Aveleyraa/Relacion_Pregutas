@@ -1,3 +1,5 @@
+from cgitb import text
+from doctest import master
 from fileinput import filename
 from multiprocessing.sharedctypes import Value
 import pandas as pd
@@ -122,7 +124,7 @@ class App(customtkinter.CTk):
         messagebox.showinfo('Aviso', 'Se ha terminado el proceso de revisión')
 
     
-    def control(entry1, entry2, entry3, entry4, entry5):
+    def control(self, entry1, entry2, entry3, entry4, entry5):
         book = filedialog.askopenfilename()
         book2  = op.load_workbook(book)
         observaciones = filedialog.askopenfilename()
@@ -133,6 +135,14 @@ class App(customtkinter.CTk):
         filename = filedialog.asksaveasfile(filetypes=data, defaultextension=data,initialfile = nombre_archivo_salvado)
         foco.save(filename.name)
         messagebox.showinfo('Aviso', 'Se ha completado el proceso')
+
+    def get_value(self):
+        text1=self.entry1.get()
+        text2=self.entry2.get()
+        text3=self.entry3.get()
+        text4=self.entry4.get()
+        text5=self.entry5.get()
+        self.control(text1, text2, text3, text4, text5)
 
     def new_window(self):
         self.title("new window")
@@ -158,47 +168,39 @@ class App(customtkinter.CTk):
         self.frame_info.columnconfigure(0, weight=2)
 
 
-        # ============ frame_right <- ============
+        # ============ frame_right <- ===========
         self.boton_importar = customtkinter.CTkButton(master=self.frame_right,
                                                         text= "Generar Formato",
-                                                        command=self.control)
-        self.boton_importar.grid(row=3, column=2, pady=20, padx=20, sticky="w")       
-
+                                                        command=self.get_value)
+        self.boton_importar.grid(row=3, column=2, pady=20, padx=20, sticky="w") 
         self.button_5 = customtkinter.CTkButton(master=self.frame_right,
                                                 text="Salir",
                                                 command=self.destroy)
-        self.button_5.grid(row=4, column=2, columnspan=1, pady=20, padx=20, sticky="we")
-
-        entry1 = customtkinter.CTkEntry(master=self.frame_right,
+        self.button_5.grid(row=4, column=2, columnspan=1, pady=20, padx=20, sticky="we")      
+        self.entry1 = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
                                             placeholder_text='Qué número de revisión es? ')
-        entry1.grid(row=0, column=0, columnspan=2,  rowspan=1, pady=20, padx=20, sticky="we")
-        text1 = entry1.get()
+        self.entry1.grid(row=0, column=0, columnspan=2,  rowspan=1, pady=20, padx=20, sticky="we")
 
-        entry2 = customtkinter.CTkEntry(master=self.frame_right,
+        self.entry2 = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
                                             placeholder_text='Cuál es la fecha programada de entrega? ')
-        entry2.grid(row=1, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
-        text2 = entry2.get()
+        self.entry2.grid(row=1, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
 
-        entry3 = customtkinter.CTkEntry(master=self.frame_right,
+        self.entry3 = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
                                             placeholder_text='Cuál fue la fecha real de entrega? ')
-        entry3.grid(row=2, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
-        text3 = entry3.get()
+        self.entry3.grid(row=2, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
 
-        entry4 = customtkinter.CTkEntry(master=self.frame_right,
+        self.entry4 = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
                                             placeholder_text='Cuál es el año del levantamiento?')
-        entry4.grid(row=3, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
-        text4 = entry4.get()
+        self.entry4.grid(row=3, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
 
-        entry5 = customtkinter.CTkEntry(master=self.frame_right,
+        self.entry5 = customtkinter.CTkEntry(master=self.frame_right,
                                             width=120,
                                             placeholder_text='Cuántas preguntas tiene el módulo? ')
-        entry5.grid(row=4, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
-        text5 = entry5.get()
-
+        self.entry5.grid(row=4, column=0, columnspan=2, rowspan=1, pady=20, padx=20, sticky="we")
 
 
 
