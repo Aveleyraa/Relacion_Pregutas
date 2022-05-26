@@ -277,18 +277,21 @@ class App(customtkinter.CTk):
         Parameters
         ----------
         Función self para obtener los valores de los entry para pasarselos a la función control
-
+        Revisa si no hay valores antes de pasar a la función control si no hay manda un mensaje para revisar
         Returns
         -------
         devuelve los valores de los entrys
 
         """
-        text1=self.entry1.get()
-        text2=self.entry2.get()
-        text3=self.entry3.get()
-        text4=self.entry4.get()
-        text5=self.entry5.get()
-        self.control(text1, text2, text3, text4, text5)
+        if len(self.entry1.get()) == 0 or len(self.entry2.get()) == 0 or len(self.entry3.get()) == 0 or len(self.entry4.get()) == 0 or len(self.entry5.get()) == 0:
+            messagebox.showinfo("Warning!", "Algún recuadro está vacío")
+        else:
+            text1=self.entry1.get()
+            text2=self.entry2.get()
+            text3=self.entry3.get()
+            text4=self.entry4.get()
+            text5=self.entry5.get()
+            self.control(text1, text2, text3, text4, text5)
 
     def new_window(self):
         self.title("Formato de Observaciones (FO)")
